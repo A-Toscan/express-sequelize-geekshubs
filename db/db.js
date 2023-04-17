@@ -18,9 +18,20 @@ const { Sequelize } = require("sequelize");
 //    }
 // );
 
+if (config.use_env_variable) {
+  sequelize = new Sequelize(process.env[config.use_env_variable], config);
+} else {
+  sequelize = new Sequelize(
+    config.database,
+    config.username,
+    config.password,
+    config
+  );
+}
+
 module.exports = async () => {
-   const dbConnection = await sequelize.authenticate();
-   const database = process.env.MYSQL_DATABASE || config.development.database;
-   console.log(`Successfully connected to '${database}' database`);
-   return dbConnection;
+  const dbConnection = await sequelize.authenticate();
+  const database = process.env.MYSQL_DATABASE || config.development.database;
+  console.log(`Successfully connected to '${database}' database`);
+  return dbConnection;
 };
