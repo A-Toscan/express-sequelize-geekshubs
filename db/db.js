@@ -1,5 +1,7 @@
-const config = require("../config/config.json");
+// const config = require("../config/config.json");
 const { Sequelize } = require("sequelize");
+const env = process.env.NODE_ENV || "development";
+const config = require(__dirname + "/../config/config.json")[env];
 
 // const sequelize = new Sequelize(
 //    process.env.MYSQL_DATABASE || config.development.database,
@@ -18,6 +20,7 @@ const { Sequelize } = require("sequelize");
 //    }
 // );
 
+let sequelize;
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {
@@ -28,6 +31,8 @@ if (config.use_env_variable) {
     config
   );
 }
+
+
 
 module.exports = async () => {
   const dbConnection = await sequelize.authenticate();
